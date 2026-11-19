@@ -8,6 +8,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.new_final_project.config.PasswordHasher;
+import com.example.new_final_project.Repository.CustomerRepository;
+import com.example.new_final_project.config.PasswordHasher;
+
 
 import java.math.BigDecimal;
 
@@ -17,13 +20,20 @@ public class DataLoader implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     private final DiscountRepository discountRepository;
+    private final CustomerRepository customerRepository;
+    private final PasswordHasher passwordHasher;
+
 
     public DataLoader(CategoryRepository categoryRepository,
                       ProductRepository productRepository,
-                      DiscountRepository discountRepository) {
+                      DiscountRepository discountRepository,
+                      CustomerRepository customerRepository,
+                      PasswordHasher passwordHasher) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
         this.discountRepository = discountRepository;
+        this.customerRepository = customerRepository;
+        this.passwordHasher = passwordHasher;
     }
 
     @Override
