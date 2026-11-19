@@ -7,6 +7,7 @@ import com.example.new_final_project.Repository.ProductRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.new_final_project.config.PasswordHasher;
 
 import java.math.BigDecimal;
 

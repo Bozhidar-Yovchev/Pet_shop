@@ -29,4 +29,10 @@ public final class AppConstants {
         public static final String FIXED = "FIXED";
         public static final String FREE_SHIPPING = "FREE_SHIPPING";
     }
+
+    public static final class SessionKeys {
+        public static final String CUSTOMER_ID = "customerId";
+        public static final String CUSTOMER_NAME = "customerName";
+        public static final String ROLE = "role";
+    }
 }

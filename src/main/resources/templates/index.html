@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Shop</title>
+</head>
+<body>
+<h1>Pet Shop</h1>
+
+<div th:if="${session.customerId != null}">
+    <p>Logged in as <b th:text="${session.customerName}"></b> (<span th:text="${session.role}"></span>)</p>
+    <a th:href="@{/logout}">Logout</a>
+</div>
+
+<div th:if="${session.customerId == null}">
+    <a th:href="@{/login}">Login</a> | <a th:href="@{/register}">Register</a>
+</div>
+</body>
+</html>
