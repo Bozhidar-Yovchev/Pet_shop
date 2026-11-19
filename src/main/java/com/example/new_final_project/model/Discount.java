@@ -1,10 +1,6 @@
 package com.example.new_final_project.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
+import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
@@ -15,68 +11,50 @@ public class Discount {
     private Long id;
 
     private String name;
+
+    @Column(unique = true)
+    private String code;
+
     private String discountType;
+
+
+    @Column(name = "discount_value")
     private BigDecimal value;
+
     private BigDecimal minOrderAmount;
     private boolean active;
 
     public Discount() {
     }
 
-    public Discount(Long id, String name, String discountType, BigDecimal value, BigDecimal minOrderAmount, boolean active) {
-        this.id = id;
+    public Discount(String name, String code, String discountType,
+                    BigDecimal value, BigDecimal minOrderAmount, boolean active) {
         this.name = name;
+        this.code = code;
         this.discountType = discountType;
         this.value = value;
         this.minOrderAmount = minOrderAmount;
         this.active = active;
     }
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getName() {
-        return name;
-    }
+    public String getCode() { return code; }
+    public void setCode(String code) { this.code = code; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String getDiscountType() { return discountType; }
+    public void setDiscountType(String discountType) { this.discountType = discountType; }
 
-    public String getDiscountType() {
-        return discountType;
-    }
+    public BigDecimal getValue() { return value; }
+    public void setValue(BigDecimal value) { this.value = value; }
 
-    public void setDiscountType(String discountType) {
-        this.discountType = discountType;
-    }
+    public BigDecimal getMinOrderAmount() { return minOrderAmount; }
+    public void setMinOrderAmount(BigDecimal minOrderAmount) { this.minOrderAmount = minOrderAmount; }
 
-    public BigDecimal getValue() {
-        return value;
-    }
-
-    public void setValue(BigDecimal value) {
-        this.value = value;
-    }
-
-    public BigDecimal getMinOrderAmount() {
-        return minOrderAmount;
-    }
-
-    public void setMinOrderAmount(BigDecimal minOrderAmount) {
-        this.minOrderAmount = minOrderAmount;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
 }

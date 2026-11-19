@@ -25,6 +25,10 @@ public class Order {
 
     private BigDecimal totalAmount;
 
+    private BigDecimal shippingCost = BigDecimal.ZERO;
+
+    private String promoCode;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
@@ -74,6 +78,12 @@ public class Order {
     public void setItems(List<OrderItem> items) {this.items = items;}
 
     public Payment getPayment() {return payment;}
+
+    public BigDecimal getShippingCost() { return shippingCost; }
+    public void setShippingCost(BigDecimal shippingCost) { this.shippingCost = shippingCost; }
+
+    public String getPromoCode() { return promoCode; }
+    public void setPromoCode(String promoCode) { this.promoCode = promoCode; }
 
     public void setPayment(Payment payment) {
         this.payment = payment;

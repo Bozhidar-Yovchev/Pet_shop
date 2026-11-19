@@ -18,7 +18,7 @@ public class Category {
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
-    Category parent; // за подкатегории (null за главна категория)[cite: 3]
+    Category parent;
 
     public Category() {
     }

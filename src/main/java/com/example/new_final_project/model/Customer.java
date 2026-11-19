@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Column;
 
 @Entity
 public class Customer {
@@ -13,11 +14,13 @@ public class Customer {
     Long id;
 
     String fullName;
+    @Column(unique = true, nullable = false)
     String username;
+    @Column(unique = true, nullable = false)
     String email;
     String password;
-    String role;         // например "CUSTOMER" или "ADMIN"[cite: 2]
-    String customerType; // съответства на Id_Type_Of-Customer от диаграмата[cite: 1, 9]
+    String role;
+    String customerType;
 
     public Customer() {
     }

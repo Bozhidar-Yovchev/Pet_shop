@@ -18,6 +18,7 @@ public class Product {
     private BigDecimal price;
     private String animalSpecies;
     private String ageGroup;
+    private boolean active = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
@@ -34,11 +35,11 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductImage> images = new ArrayList<>();
 
-    // JPA requires a no-argument constructor
+
     public Product() {
     }
 
-    // Constructor with basic fields
+
     public Product(String name, String description, BigDecimal price,
                    String animalSpecies, String ageGroup,
                    Category category, Inventory inventory, Discount discount) {
@@ -52,7 +53,9 @@ public class Product {
         this.discount = discount;
     }
 
-    // Getters and Setters
+
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
 
     public Long getId() {return id;}
 
