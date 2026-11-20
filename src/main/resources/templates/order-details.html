@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order</title>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<p th:if="${param.placed}" style="color:green">Thank you! Your order was placed.</p>
+
+<h1>Order #<span th:text="${order.id}"></span></h1>
+<p>Date: <span th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy HH:mm')}"></span></p>
+<p>Status: <b th:text="${order.status}"></b></p>
+
+<table border="1" cellpadding="6">
+    <tr><th>Product</th><th>Qty</th><th>Unit price</th><th>Total</th></tr>
+    <tr th:each="item : ${order.items}">
+        <td th:text="${item.product.name}"></td>
+        <td th:text="${item.quantity}"></td>
+        <td th:text="${item.unitPrice} + ' €'"></td>
+        <td th:text="${item.unitPrice.multiply(item.quantity)} + ' €'"></td>
+    </tr>
+</table>
+
+<table cellpadding="4">
+    <tr><td>Subtotal</td><td th:text="${order.subtotal} + ' €'"></td></tr>
+    <tr th:if="${order.discountAmount.signum() > 0}">
+        <td>Discount (<span th:text="${order.promoCode}"></span>)</td>
+        <td th:text="'-' + ${order.discountAmount} + ' €'"></td></tr>
+    <tr><td>Shipping</td>
+        <td th:text="${order.shippingCost.signum() == 0} ? 'Free' : ${order.shippingCost} + ' €'"></td></tr>
+    <tr><td><b>Total</b></td><td><b th:text="${order.totalAmount} + ' €'"></b></td></tr>
+</table>
+
+<h3>Payment</h3>
+<p th:if="${order.payment != null}">
+    <span th:text="${order.payment.paymentMethod}"></span> -
+    <b th:text="${order.payment.status}"></b></p>
+
+<h3>Delivery address</h3>
+<p th:if="${order.shipment != null}" th:text="${order.shipment.shippingAddress}"></p>
+
+<p><a th:href="@{/products}">Continue shopping</a></p>
+</body>
+</html>

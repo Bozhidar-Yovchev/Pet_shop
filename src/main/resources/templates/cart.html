@@ -51,7 +51,9 @@
 
     <p th:if="${!cart.checkoutAllowed()}" style="color:red">
         Fix the problems above before you can check out.</p>
-    <p><i>The checkout button comes with the next step.</i></p>
+    <p th:if="${cart.checkoutAllowed()}">
+        <a th:href="@{/checkout}"><button type="button">Proceed to checkout</button></a>
+    </p>
 </div>
 
 <p><a th:href="@{/products}">&larr; Continue shopping</a></p>

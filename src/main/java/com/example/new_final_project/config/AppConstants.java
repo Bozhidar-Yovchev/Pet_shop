@@ -1,11 +1,20 @@
 package com.example.new_final_project.config;
 
 import java.util.List;
+import java.math.BigDecimal;
 
 public final class AppConstants {
 
     private AppConstants() {}
 
+    public static final class PaymentMethod {
+        public static final String CARD = "CARD";
+        public static final String CASH_ON_DELIVERY = "CASH_ON_DELIVERY";
+    }
+
+    public static final class Shipping {
+        public static final BigDecimal COST = new BigDecimal("5.00");
+    }
     public static final class Species {
         public static final List<String> ALL = List.of("DOG", "CAT", "BIRD", "FISH", "RODENT");
     }

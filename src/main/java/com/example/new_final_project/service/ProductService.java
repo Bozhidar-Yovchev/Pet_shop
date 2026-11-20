@@ -1,6 +1,5 @@
 package com.example.new_final_project.service;
 
-import com.example.new_final_project.config.AppConstants;
 import com.example.new_final_project.dto.ProductForm;
 import com.example.new_final_project.model.*;
 import com.example.new_final_project.Repository.CategoryRepository;
@@ -23,13 +22,16 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final DiscountRepository discountRepository;
+    private final PricingService pricingService;
 
     public ProductService(ProductRepository productRepository,
                           CategoryRepository categoryRepository,
-                          DiscountRepository discountRepository) {
+                          DiscountRepository discountRepository,
+                          PricingService pricingService) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.discountRepository = discountRepository;
+        this.pricingService = pricingService;
     }
 
     // ---------- Reading ----------
@@ -75,29 +77,17 @@ public class ProductService {
         return discountRepository.findByCodeIsNull();
     }
 
-    // ---------- Price (called from templates too) ----------
+
 
     public boolean hasDiscount(Product product) {
-        return product.getDiscount() != null && product.getDiscount().isActive();
+        return pricingService.hasDiscount(product);
     }
 
     public BigDecimal finalPrice(Product product) {
-        BigDecimal price = product.getPrice();
-        if (!hasDiscount(product)) {
-            return price;
-        }
-        Discount discount = product.getDiscount();
-        BigDecimal result = switch (discount.getDiscountType()) {
-            case AppConstants.DiscountType.PERCENTAGE -> price.subtract(
-                    price.multiply(discount.getValue())
-                            .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
-            case AppConstants.DiscountType.FIXED -> price.subtract(discount.getValue());
-            default -> price;
-        };
-        return result.max(BigDecimal.ZERO).setScale(2, RoundingMode.HALF_UP);
+        return pricingService.finalPrice(product);
     }
 
-    // ---------- Admin: create / update / (de)activate ----------
+
 
     @Transactional(readOnly = true)
     public ProductForm toForm(Product product) {

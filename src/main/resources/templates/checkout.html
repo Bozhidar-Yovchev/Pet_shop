@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout</title>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+<h1>Checkout</h1>
+
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+
+<h2>Your items</h2>
+<table border="1" cellpadding="6">
+    <tr><th>Product</th><th>Qty</th><th>Unit price</th><th>Total</th></tr>
+    <tr th:each="line : ${cart.lines()}">
+        <td th:text="${line.product().name}"></td>
+        <td th:text="${line.quantity()}"></td>
+        <td th:text="${line.unitPrice()} + ' €'"></td>
+        <td th:text="${line.lineTotal()} + ' €'"></td>
+    </tr>
+</table>
+<p><a th:href="@{/cart}">Change the cart</a></p>
+
+<form th:action="@{/checkout}" th:object="${checkoutForm}" method="post">
+
+    <h2>Delivery address</h2>
+    <p th:if="${#lists.isEmpty(addresses)}" style="color:red">
+        You have no saved address. <a th:href="@{/addresses/new}">Add one</a> first.</p>
+    <p th:unless="${#lists.isEmpty(addresses)}">
+        <select th:field="*{addressId}">
+            <option value="">-- choose --</option>
+            <option th:each="a : ${addresses}" th:value="${a.id}"
+                    th:text="${a.street + ', ' + a.postalCode + ' ' + a.city}"></option>
+        </select>
+        <span th:if="${#fields.hasErrors('addressId')}" th:errors="*{addressId}" style="color:red"></span>
+    </p>
+
+    <h2>Promo code</h2>
+    <p>
+        <input type="text" th:field="*{promoCode}">
+        <button type="submit" th:formaction="@{/checkout/promo}">Apply code</button>
+        <span th:if="${promoMessage}" th:text="${promoMessage}" style="color:green"></span>
+        <span th:if="${promoError}" th:text="${promoError}" style="color:red"></span>
+    </p>
+
+    <h2>Payment</h2>
+    <p>
+        <label><input type="radio" th:field="*{paymentMethod}" value="CASH_ON_DELIVERY"> Cash on delivery</label><br>
+        <label><input type="radio" th:field="*{paymentMethod}" value="CARD"> Card (simulated)</label>
+        <span th:if="${#fields.hasErrors('paymentMethod')}" th:errors="*{paymentMethod}" style="color:red"></span>
+    </p>
+    <p>Card number (only for card payment, 16 digits, not stored):<br>
+        <input type="text" th:field="*{cardNumber}" maxlength="19" autocomplete="off"></p>
+
+    <h2>Summary</h2>
+    <table cellpadding="4">
+        <tr><td>Subtotal</td><td th:text="${pricing.subtotal()} + ' €'"></td></tr>
+        <tr th:if="${pricing.discountAmount().signum() > 0}">
+            <td>Discount</td><td th:text="'-' + ${pricing.discountAmount()} + ' €'"></td></tr>
+        <tr><td>Shipping</td>
+            <td th:text="${pricing.shippingCost().signum() == 0} ? 'Free' : ${pricing.shippingCost()} + ' €'"></td></tr>
+        <tr><td><b>Total</b></td><td><b th:text="${pricing.total()} + ' €'"></b></td></tr>
+    </table>
+
+    <p><button type="submit">Place order</button></p>
+</form>
+</body>
+</html>
