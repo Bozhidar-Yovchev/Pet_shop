@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Notifications</title>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+<h1>Notifications</h1>
+
+<p th:if="${#lists.isEmpty(notifications)}">No notifications yet.</p>
+
+<div th:unless="${#lists.isEmpty(notifications)}">
+    <form th:action="@{/notifications/read}" method="post">
+        <button type="submit">Mark all as read</button>
+    </form>
+    <table border="1" cellpadding="6">
+        <tr><th>Date</th><th>Channel</th><th>Message</th><th>Order</th></tr>
+        <tr th:each="n : ${notifications}" th:style="${!n.seen} ? 'font-weight:bold'">
+            <td th:text="${#temporals.format(n.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
+            <td th:text="${n.channel}"></td>
+            <td th:text="${n.message}"></td>
+            <td><a th:if="${n.order != null}" th:href="@{/orders/{id}(id=${n.order.id})}"
+                   th:text="'#' + ${n.order.id}"></a></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

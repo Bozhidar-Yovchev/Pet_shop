@@ -11,7 +11,13 @@
 
 <h1>Order #<span th:text="${order.id}"></span></h1>
 <p>Date: <span th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy HH:mm')}"></span></p>
+<p th:if="${message}" th:text="${message}" style="color:green"></p>
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
 <p>Status: <b th:text="${order.status}"></b></p>
+<form th:if="${canCancel}" th:action="@{/orders/{id}/cancel(id=${order.id})}" method="post"
+      onsubmit="return confirm('Cancel this order?')">
+    <button type="submit">Cancel order</button>
+</form>
 
 <table border="1" cellpadding="6">
     <tr><th>Product</th><th>Qty</th><th>Unit price</th><th>Total</th></tr>
@@ -41,6 +47,6 @@
 <h3>Delivery address</h3>
 <p th:if="${order.shipment != null}" th:text="${order.shipment.shippingAddress}"></p>
 
-<p><a th:href="@{/products}">Continue shopping</a></p>
+<p><a th:href="@{/orders}">&larr; All my orders</a> | <a th:href="@{/products}">Continue shopping</a></p>
 </body>
 </html>

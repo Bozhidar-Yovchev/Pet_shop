@@ -34,6 +34,13 @@ public final class AppConstants {
         public static final String SHIPPED = "SHIPPED";
         public static final String DELIVERED = "DELIVERED";
         public static final String CANCELLED = "CANCELLED";
+        public static final List<String> ALL = List.of(PENDING, CONFIRMED, SHIPPED, DELIVERED, CANCELLED);
+    }
+
+    public static final class Channel {
+        public static final String IN_APP = "IN_APP";
+        public static final String EMAIL = "EMAIL";
+        public static final String SMS = "SMS";
     }
 
     public static final class PaymentStatus {

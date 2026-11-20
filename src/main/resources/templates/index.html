@@ -6,7 +6,45 @@
 </head>
 <body>
 <div th:replace="~{fragments/nav :: nav}"></div>
-<h1>Pet Shop</h1>
-<p><a th:href="@{/products}">Browse our products</a></p>
+
+<div class="hero">
+    <h1>Everything your pet needs</h1>
+    <p>Food, toys and accessories for dogs, cats, birds and more. Free shipping on orders over 50 € with code FREESHIP.</p>
+    <a class="btn" th:href="@{/products}">Shop now</a>
+</div>
+
+<h2>Shop by animal</h2>
+<div class="tiles">
+    <a class="tile" th:each="s : ${speciesList}" th:href="@{/products(species=${s})}">
+        <span class="emoji"
+              th:text="${s == 'DOG' ? '🐶' : s == 'CAT' ? '🐱' : s == 'BIRD' ? '🐦' : s == 'FISH' ? '🐟' : '🐹'}"></span>
+        <b th:text="${s}"></b>
+    </a>
+</div>
+
+<h2>Categories</h2>
+<div class="chips">
+    <a class="chip" th:each="c : ${mainCategories}" th:href="@{/products(categoryId=${c.id})}" th:text="${c.name}"></a>
+</div>
+
+<h2 th:if="${!#lists.isEmpty(deals)}">On sale</h2>
+<div class="grid">
+    <th:block th:each="p : ${deals}">
+        <div th:replace="~{fragments/product-card :: card(${p})}"></div>
+    </th:block>
+</div>
+
+<h2>New arrivals</h2>
+<div class="grid">
+    <th:block th:each="p : ${newest}">
+        <div th:replace="~{fragments/product-card :: card(${p})}"></div>
+    </th:block>
+</div>
+
+<div class="perks">
+    <div class="perk"><b>🚚 Free shipping</b><br><span class="muted">Orders over 50 € with code FREESHIP</span></div>
+    <div class="perk"><b>🏷️ Promo codes</b><br><span class="muted">Try WELCOME15 for 15% off</span></div>
+    <div class="perk"><b>💳 Easy payment</b><br><span class="muted">Card or cash on delivery</span></div>
+</div>
 </body>
 </html>

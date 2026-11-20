@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage orders</title>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+<h1>Manage orders</h1>
+
+<form th:action="@{/admin/orders}" method="get">
+    <select name="status">
+        <option value="">All statuses</option>
+        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}" th:selected="${s == selected}"></option>
+    </select>
+    <button type="submit">Filter</button>
+</form>
+
+<p th:if="${#lists.isEmpty(orders)}">No orders found.</p>
+
+<table border="1" cellpadding="6" th:unless="${#lists.isEmpty(orders)}">
+    <tr><th>Order</th><th>Date</th><th>Customer</th><th>Status</th><th>Total</th><th></th></tr>
+    <tr th:each="o : ${orders}">
+        <td th:text="'#' + ${o.id}"></td>
+        <td th:text="${#temporals.format(o.orderDate, 'dd.MM.yyyy HH:mm')}"></td>
+        <td th:text="${o.customer.fullName}"></td>
+        <td th:text="${o.status}"></td>
+        <td th:text="${o.totalAmount} + ' €'"></td>
+        <td><a th:href="@{/admin/orders/{id}(id=${o.id})}">Open</a></td>
+    </tr>
+</table>
+</body>
+</html>

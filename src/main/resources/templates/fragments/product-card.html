@@ -1,0 +1,26 @@
+<div xmlns:th="http://www.thymeleaf.org" class="card" th:fragment="card(p)">
+    <a th:href="@{/products/{id}(id=${p.id})}">
+        <img th:if="${!p.images.isEmpty()}" th:src="${p.images[0].imageUrl}" alt="">
+        <div th:if="${p.images.isEmpty()}" class="no-image"></div>
+    </a>
+    <div class="card-body">
+        <h3><a th:href="@{/products/{id}(id=${p.id})}" th:text="${p.name}"></a></h3>
+        <div class="muted" th:text="${p.animalSpecies + ' · ' + p.ageGroup + ' · ' + p.category.name}"></div>
+
+        <div class="price">
+            <th:block th:if="${@productService.hasDiscount(p)}">
+                <s th:text="${p.price} + ' €'"></s>
+                <span class="now" th:text="${@productService.finalPrice(p)} + ' €'"></span>
+            </th:block>
+            <th:block th:unless="${@productService.hasDiscount(p)}" th:text="${p.price} + ' €'"></th:block>
+        </div>
+
+        <div>
+            <span class="badge sale" th:if="${@productService.hasDiscount(p)}" th:text="${p.discount.name}"></span>
+            <span class="badge out" th:if="${p.inventory.quantity == 0}">Out of stock</span>
+            <span class="badge low" th:if="${p.inventory.quantity gt 0 and p.inventory.quantity le 5}"
+                  th:text="'Only ' + ${p.inventory.quantity} + ' left'"></span>
+            <span class="badge" th:if="${p.inventory.quantity gt 5}">In stock</span>
+        </div>
+    </div>
+</div>

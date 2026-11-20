@@ -12,4 +12,9 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     @Modifying(flushAutomatically = true)
     @Query("update Inventory i set i.quantity = i.quantity - :qty where i.id = :id and i.quantity >= :qty")
     int decreaseIfAvailable(@Param("id") Long id, @Param("qty") int qty);
+
+    // Gives stock back (used when an order is cancelled)
+    @Modifying(flushAutomatically = true)
+    @Query("update Inventory i set i.quantity = i.quantity + :qty where i.id = :id")
+    int increase(@Param("id") Long id, @Param("qty") int qty);
 }

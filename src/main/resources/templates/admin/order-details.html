@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order</title>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<p><a th:href="@{/admin/orders}">&larr; All orders</a></p>
+<h1>Order #<span th:text="${order.id}"></span></h1>
+
+<p th:if="${message}" th:text="${message}" style="color:green"></p>
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+
+<p>Customer: <b th:text="${order.customer.fullName}"></b> (<span th:text="${order.customer.email}"></span>)</p>
+<p>Date: <span th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy HH:mm')}"></span></p>
+<p>Status: <b th:text="${order.status}"></b></p>
+
+<div th:if="${!#lists.isEmpty(nextStatuses)}">
+    <form th:each="s : ${nextStatuses}" th:action="@{/admin/orders/{id}/status(id=${order.id})}"
+          method="post" style="display:inline">
+        <input type="hidden" name="status" th:value="${s}">
+        <button type="submit" th:text="'Set ' + ${s}"></button>
+    </form>
+</div>
+<p th:if="${#lists.isEmpty(nextStatuses)}"><i>This order is final, its status cannot change.</i></p>
+
+<table border="1" cellpadding="6">
+    <tr><th>Product</th><th>Qty</th><th>Unit price</th><th>Total</th></tr>
+    <tr th:each="item : ${order.items}">
+        <td th:text="${item.product.name}"></td>
+        <td th:text="${item.quantity}"></td>
+        <td th:text="${item.unitPrice} + ' €'"></td>
+        <td th:text="${item.unitPrice.multiply(item.quantity)} + ' €'"></td>
+    </tr>
+</table>
+
+<p>Subtotal: <span th:text="${order.subtotal} + ' €'"></span><br>
+    <span th:if="${order.discountAmount.signum() > 0}">
+       Discount (<span th:text="${order.promoCode}"></span>): -<span th:text="${order.discountAmount} + ' €'"></span><br></span>
+    Shipping: <span th:text="${order.shippingCost} + ' €'"></span><br>
+    <b>Total: <span th:text="${order.totalAmount} + ' €'"></span></b></p>
+
+<p th:if="${order.payment != null}">Payment:
+    <span th:text="${order.payment.paymentMethod}"></span> -
+    <b th:text="${order.payment.status}"></b></p>
+<p th:if="${order.shipment != null}">Address: <span th:text="${order.shipment.shippingAddress}"></span></p>
+</body>
+</html>

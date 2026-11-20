@@ -1,20 +1,30 @@
-<div xmlns:th="http://www.thymeleaf.org" th:fragment="nav">
-    <a th:href="@{/}">Home</a> |
-    <a th:href="@{/products}">Products</a>
-    <span th:if="${session.role == 'ADMIN'}">
-        | <a th:href="@{/admin/products}">Manage products</a>
-        | <a th:href="@{/admin/categories}">Manage categories</a>
-    </span>
-    <span th:if="${session.customerId != null}">
-        | <a th:href="@{/cart}">Cart</a>
-        | <a th:href="@{/profile}">My profile</a>
-        | <a th:href="@{/addresses}">My addresses</a>
-        | <span th:text="${session.customerName}"></span>
-        | <a th:href="@{/logout}">Logout</a>
-    </span>
-    <span th:if="${session.customerId == null}">
-        | <a th:href="@{/login}">Login</a>
-        | <a th:href="@{/register}">Register</a>
-    </span>
-    <hr>
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="nav" class="topbar">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <div class="topbar-inner">
+        <a th:href="@{/}" class="brand">🐾 Pet Shop</a>
+        <a th:href="@{/products}">Products</a>
+
+        <span th:if="${session.role == 'ADMIN'}">
+            <a th:href="@{/admin/products}">Manage products</a> &nbsp;
+            <a th:href="@{/admin/categories}">Categories</a> &nbsp;
+            <a th:href="@{/admin/orders}">Orders</a>
+        </span>
+
+        <span class="spacer"></span>
+
+        <th:block th:if="${session.customerId != null}">
+            <a th:href="@{/cart}">🛒 Cart</a>
+            <a th:href="@{/orders}">My orders</a>
+            <a th:href="@{/notifications}"
+               th:text="'🔔 (' + ${unreadCount ?: 0} + ')'">🔔</a>
+            <a th:href="@{/profile}">Profile</a>
+            <a th:href="@{/addresses}">Addresses</a>
+            <span class="user" th:text="${session.customerName}"></span>
+            <a th:href="@{/logout}">Logout</a>
+        </th:block>
+        <th:block th:if="${session.customerId == null}">
+            <a th:href="@{/login}">Login</a>
+            <a th:href="@{/register}">Register</a>
+        </th:block>
+    </div>
 </div>
