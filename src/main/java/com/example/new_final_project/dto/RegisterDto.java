@@ -1,4 +1,4 @@
-package com.example.new_final_project.model;
+package com.example.new_final_project.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

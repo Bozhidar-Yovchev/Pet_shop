@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage products</title>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+<h1>Manage products</h1>
+
+<p th:if="${message}" th:text="${message}" style="color:green"></p>
+<p><a th:href="@{/admin/products/new}">+ New product</a></p>
+
+<table border="1" cellpadding="6">
+    <tr>
+        <th>ID</th><th>Name</th><th>Category</th><th>Price</th>
+        <th>Stock</th><th>Discount</th><th>Active</th><th>Actions</th>
+    </tr>
+    <tr th:each="p : ${products}">
+        <td th:text="${p.id}"></td>
+        <td><a th:href="@{/products/{id}(id=${p.id})}" th:text="${p.name}"></a></td>
+        <td th:text="${p.category.name}"></td>
+        <td th:text="${p.price}"></td>
+        <td th:text="${p.inventory.quantity}"></td>
+        <td th:text="${p.discount != null ? p.discount.name : '-'}"></td>
+        <td th:text="${p.active ? 'Yes' : 'No'}"></td>
+        <td>
+            <a th:href="@{/admin/products/{id}/edit(id=${p.id})}">Edit</a>
+            <form th:if="${p.active}" th:action="@{/admin/products/{id}/deactivate(id=${p.id})}"
+                  method="post" style="display:inline">
+                <button type="submit">Deactivate</button>
+            </form>
+            <form th:unless="${p.active}" th:action="@{/admin/products/{id}/activate(id=${p.id})}"
+                  method="post" style="display:inline">
+                <button type="submit">Activate</button>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

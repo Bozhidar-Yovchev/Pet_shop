@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${product.name}">Product</title>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<p><a th:href="@{/products}">&larr; Back to products</a></p>
+
+<p th:if="${!product.active}" style="color:red">This product is deactivated (visible to admins only).</p>
+
+<h1 th:text="${product.name}"></h1>
+
+<img th:if="${!product.images.isEmpty()}" th:src="${product.images[0].imageUrl}" width="300" alt="">
+
+<p th:text="${product.description}"></p>
+
+<ul>
+    <li>Animal: <span th:text="${product.animalSpecies}"></span></li>
+    <li>Age group: <span th:text="${product.ageGroup}"></span></li>
+    <li>Category: <span th:text="${product.category.name}"></span></li>
+</ul>
+
+<p>
+    Price:
+    <span th:if="${@productService.hasDiscount(product)}">
+        <s th:text="${product.price} + ' €'"></s>
+        <b th:text="${@productService.finalPrice(product)} + ' €'"></b>
+        (<span th:text="${product.discount.name}"></span>)
+    </span>
+    <span th:unless="${@productService.hasDiscount(product)}" th:text="${product.price} + ' €'"></span>
+</p>
+
+<p>
+    Availability:
+    <span th:if="${product.inventory.quantity == 0}">Out of stock</span>
+    <span th:if="${product.inventory.quantity gt 0 and product.inventory.quantity le 5}"
+          th:text="'Only ' + ${product.inventory.quantity} + ' left'"></span>
+    <span th:if="${product.inventory.quantity gt 5}">In stock</span>
+</p>
+
+<p><i>The "Add to cart" button comes with the cart step.</i></p>
+</body>
+</html>

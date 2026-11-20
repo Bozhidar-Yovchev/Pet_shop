@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+<h1>Products</h1>
+
+<form th:action="@{/products}" method="get">
+    <input type="text" name="q" th:value="${q}" placeholder="Search by name">
+
+    <select name="species">
+        <option value="">All animals</option>
+        <option th:each="s : ${speciesList}" th:value="${s}" th:text="${s}"
+                th:selected="${s == species}"></option>
+    </select>
+
+    <select name="ageGroup">
+        <option value="">All ages</option>
+        <option th:each="a : ${ageGroups}" th:value="${a}" th:text="${a}"
+                th:selected="${a == ageGroup}"></option>
+    </select>
+
+    <select name="categoryId">
+        <option value="">All categories</option>
+        <option th:each="c : ${categories}" th:value="${c.id}"
+                th:text="${c.parent != null ? c.parent.name + ' > ' + c.name : c.name}"
+                th:selected="${c.id == categoryId}"></option>
+    </select>
+
+    <button type="submit">Filter</button>
+    <a th:href="@{/products}">Reset</a>
+</form>
+
+<p th:if="${#lists.isEmpty(products)}">No products found.</p>
+
+<table border="1" cellpadding="6" th:unless="${#lists.isEmpty(products)}">
+    <tr>
+        <th></th><th>Name</th><th>Animal</th><th>Age</th><th>Category</th><th>Price</th><th>Stock</th>
+    </tr>
+    <tr th:each="p : ${products}">
+        <td><img th:if="${!p.images.isEmpty()}" th:src="${p.images[0].imageUrl}" width="80" alt=""></td>
+        <td><a th:href="@{/products/{id}(id=${p.id})}" th:text="${p.name}"></a></td>
+        <td th:text="${p.animalSpecies}"></td>
+        <td th:text="${p.ageGroup}"></td>
+        <td th:text="${p.category.name}"></td>
+        <td>
+            <span th:if="${@productService.hasDiscount(p)}">
+                <s th:text="${p.price} + ' €'"></s>
+                <b th:text="${@productService.finalPrice(p)} + ' €'"></b>
+            </span>
+            <span th:unless="${@productService.hasDiscount(p)}" th:text="${p.price} + ' €'"></span>
+        </td>
+        <td>
+            <span th:if="${p.inventory.quantity == 0}">Out of stock</span>
+            <span th:if="${p.inventory.quantity gt 0 and p.inventory.quantity le 5}"
+                  th:text="'Only ' + ${p.inventory.quantity} + ' left'"></span>
+            <span th:if="${p.inventory.quantity gt 5}">In stock</span>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

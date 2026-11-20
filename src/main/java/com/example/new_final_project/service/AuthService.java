@@ -2,7 +2,7 @@ package com.example.new_final_project.service;
 
 import com.example.new_final_project.config.AppConstants;
 import com.example.new_final_project.config.PasswordHasher;
-import com.example.new_final_project.model.RegisterDto;
+import com.example.new_final_project.dto.RegisterDto;
 import com.example.new_final_project.model.Customer;
 import com.example.new_final_project.Repository.CustomerRepository;
 import org.springframework.stereotype.Service;

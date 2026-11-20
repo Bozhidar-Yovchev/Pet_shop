@@ -1,7 +1,7 @@
 package com.example.new_final_project.controller;
 
 import com.example.new_final_project.config.AppConstants;
-import com.example.new_final_project.model.RegisterDto;
+import com.example.new_final_project.dto.RegisterDto;
 import com.example.new_final_project.model.Customer;
 import com.example.new_final_project.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -73,8 +73,11 @@ public class AuthController {
             return "login";
         }
 
-        request.changeSessionId();   // protects against session fixation
-        HttpSession session = request.getSession();
+        HttpSession oldSession = request.getSession(false);
+        if (oldSession != null) {
+            oldSession.invalidate();
+        }
+        HttpSession session = request.getSession(true);
         session.setAttribute(AppConstants.SessionKeys.CUSTOMER_ID, customer.get().getId());
         session.setAttribute(AppConstants.SessionKeys.CUSTOMER_NAME, customer.get().getFullName());
         session.setAttribute(AppConstants.SessionKeys.ROLE, customer.get().getRole());

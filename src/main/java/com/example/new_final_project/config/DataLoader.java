@@ -42,6 +42,10 @@ public class DataLoader implements CommandLineRunner {
         if (categoryRepository.count() > 0) {
             return;
         }
+        customerRepository.save(new Customer("Administrator", "admin", "admin@petshop.com",
+                passwordHasher.encode("admin123"), AppConstants.Role.ADMIN, "REGULAR"));
+        customerRepository.save(new Customer("Test Client", "client", "client@petshop.com",
+                passwordHasher.encode("client123"), AppConstants.Role.CUSTOMER, "REGULAR"));
 
         // Categories and subcategories
         Category food = categoryRepository.save(new Category("Food", null));

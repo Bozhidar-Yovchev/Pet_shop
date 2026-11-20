@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface DiscountRepository extends JpaRepository<Discount, Long> {
     List<Discount> findByActiveTrue();
+    List<Discount> findByCodeIsNull();   // product discounts (no promo code)
 }

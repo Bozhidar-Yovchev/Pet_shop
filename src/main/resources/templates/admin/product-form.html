@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Product</title>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+<h1 th:text="${productForm.id == null ? 'New product' : 'Edit product'}"></h1>
+
+<form th:action="@{${formAction}}" th:object="${productForm}" method="post">
+
+    <p>Name<br>
+        <input type="text" th:field="*{name}">
+        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color:red"></span></p>
+
+    <p>Description<br>
+        <textarea th:field="*{description}" rows="4" cols="40"></textarea></p>
+
+    <p>Price (€)<br>
+        <input type="number" step="0.01" th:field="*{price}">
+        <span th:if="${#fields.hasErrors('price')}" th:errors="*{price}" style="color:red"></span></p>
+
+    <p>Animal<br>
+        <select th:field="*{animalSpecies}">
+            <option value="">-- choose --</option>
+            <option th:each="s : ${speciesList}" th:value="${s}" th:text="${s}"></option>
+        </select>
+        <span th:if="${#fields.hasErrors('animalSpecies')}" th:errors="*{animalSpecies}" style="color:red"></span></p>
+
+    <p>Age group<br>
+        <select th:field="*{ageGroup}">
+            <option value="">-- choose --</option>
+            <option th:each="a : ${ageGroups}" th:value="${a}" th:text="${a}"></option>
+        </select>
+        <span th:if="${#fields.hasErrors('ageGroup')}" th:errors="*{ageGroup}" style="color:red"></span></p>
+
+    <p>Category<br>
+        <select th:field="*{categoryId}">
+            <option value="">-- choose --</option>
+            <option th:each="c : ${categories}" th:value="${c.id}"
+                    th:text="${c.parent != null ? c.parent.name + ' > ' + c.name : c.name}"></option>
+        </select>
+        <span th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}" style="color:red"></span></p>
+
+    <p>Discount (optional)<br>
+        <select th:field="*{discountId}">
+            <option value="">No discount</option>
+            <option th:each="d : ${discounts}" th:value="${d.id}"
+                    th:text="${d.name + ' (' + d.discountType + ' ' + d.value + ')'}"></option>
+        </select></p>
+
+    <p>Stock quantity<br>
+        <input type="number" th:field="*{quantity}">
+        <span th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}" style="color:red"></span></p>
+
+    <p>Image URL<br>
+        <input type="text" th:field="*{imageUrl}" size="50"></p>
+
+    <p><label><input type="checkbox" th:field="*{active}"> Active (visible in the catalog)</label></p>
+
+    <button type="submit">Save</button>
+    <a th:href="@{/admin/products}">Cancel</a>
+</form>
+</body>
+</html>

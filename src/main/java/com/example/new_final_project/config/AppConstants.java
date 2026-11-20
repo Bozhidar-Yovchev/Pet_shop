@@ -1,8 +1,18 @@
 package com.example.new_final_project.config;
 
+import java.util.List;
+
 public final class AppConstants {
 
     private AppConstants() {}
+
+    public static final class Species {
+        public static final List<String> ALL = List.of("DOG", "CAT", "BIRD", "FISH", "RODENT");
+    }
+
+    public static final class AgeGroup {
+        public static final List<String> ALL = List.of("PUPPY", "KITTEN", "ADULT", "SENIOR", "ALL");
+    }
 
     public static final class Role {
         public static final String ADMIN = "ADMIN";

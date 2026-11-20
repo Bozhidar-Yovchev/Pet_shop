@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage categories</title>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+<h1>Manage categories</h1>
+
+<p th:if="${message}" th:text="${message}" style="color:green"></p>
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+<p><a th:href="@{/admin/categories/new}">+ New category</a></p>
+
+<table border="1" cellpadding="6">
+    <tr><th>ID</th><th>Name</th><th>Parent</th><th>Actions</th></tr>
+    <tr th:each="c : ${categories}">
+        <td th:text="${c.id}"></td>
+        <td th:text="${c.name}"></td>
+        <td th:text="${c.parent != null ? c.parent.name : '-'}"></td>
+        <td>
+            <a th:href="@{/admin/categories/{id}/edit(id=${c.id})}">Edit</a>
+            <form th:action="@{/admin/categories/{id}/delete(id=${c.id})}" method="post"
+                  style="display:inline" onsubmit="return confirm('Delete this category?')">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
