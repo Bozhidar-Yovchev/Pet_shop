@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Address</title>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+<h1 th:text="${title}"></h1>
+
+<form th:action="@{${formAction}}" th:object="${addressForm}" method="post">
+    <p>Street<br>
+        <input type="text" th:field="*{street}">
+        <span th:if="${#fields.hasErrors('street')}" th:errors="*{street}" style="color:red"></span></p>
+    <p>City<br>
+        <input type="text" th:field="*{city}">
+        <span th:if="${#fields.hasErrors('city')}" th:errors="*{city}" style="color:red"></span></p>
+    <p>Postal code<br>
+        <input type="text" th:field="*{postalCode}">
+        <span th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}" style="color:red"></span></p>
+    <button type="submit">Save</button>
+    <a th:href="@{/addresses}">Cancel</a>
+</form>
+</body>
+</html>

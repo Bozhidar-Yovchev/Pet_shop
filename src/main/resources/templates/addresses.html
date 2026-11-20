@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My addresses</title>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+<h1>My addresses</h1>
+
+<p th:if="${message}" th:text="${message}" style="color:green"></p>
+<p><a th:href="@{/addresses/new}">+ New address</a></p>
+
+<p th:if="${#lists.isEmpty(addresses)}">You have no saved addresses yet.</p>
+
+<table border="1" cellpadding="6" th:unless="${#lists.isEmpty(addresses)}">
+    <tr><th>Street</th><th>City</th><th>Postal code</th><th>Actions</th></tr>
+    <tr th:each="a : ${addresses}">
+        <td th:text="${a.street}"></td>
+        <td th:text="${a.city}"></td>
+        <td th:text="${a.postalCode}"></td>
+        <td>
+            <a th:href="@{/addresses/{id}/edit(id=${a.id})}">Edit</a>
+            <form th:action="@{/addresses/{id}/delete(id=${a.id})}" method="post"
+                  style="display:inline" onsubmit="return confirm('Delete this address?')">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

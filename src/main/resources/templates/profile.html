@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My profile</title>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+<h1>My profile</h1>
+
+<p th:if="${message}" th:text="${message}" style="color:green"></p>
+<p>Username: <b th:text="${username}"></b> (cannot be changed)</p>
+
+<form th:action="@{/profile}" th:object="${profileForm}" method="post">
+    <p>Full name<br>
+        <input type="text" th:field="*{fullName}">
+        <span th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" style="color:red"></span></p>
+    <p>Email<br>
+        <input type="text" th:field="*{email}">
+        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color:red"></span></p>
+    <button type="submit">Save profile</button>
+</form>
+
+<h2>Change password</h2>
+<form th:action="@{/profile/password}" th:object="${passwordForm}" method="post">
+    <p>Current password<br>
+        <input type="password" th:field="*{currentPassword}">
+        <span th:if="${#fields.hasErrors('currentPassword')}" th:errors="*{currentPassword}" style="color:red"></span></p>
+    <p>New password<br>
+        <input type="password" th:field="*{newPassword}">
+        <span th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}" style="color:red"></span></p>
+    <p>Repeat new password<br>
+        <input type="password" th:field="*{confirmPassword}">
+        <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" style="color:red"></span></p>
+    <button type="submit">Change password</button>
+</form>
+</body>
+</html>

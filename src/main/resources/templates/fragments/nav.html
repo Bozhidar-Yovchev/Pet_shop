@@ -6,6 +6,8 @@
         | <a th:href="@{/admin/categories}">Manage categories</a>
     </span>
     <span th:if="${session.customerId != null}">
+        | <a th:href="@{/profile}">My profile</a>
+        | <a th:href="@{/addresses}">My addresses</a>
         | <span th:text="${session.customerName}"></span>
         | <a th:href="@{/logout}">Logout</a>
     </span>
