@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My cart</title>
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+<h1>My cart</h1>
+
+<p th:if="${message}" th:text="${message}" style="color:green"></p>
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+
+<p th:if="${#lists.isEmpty(cart.lines())}">Your cart is empty.
+    <a th:href="@{/products}">Browse products</a></p>
+
+<div th:unless="${#lists.isEmpty(cart.lines())}">
+    <table border="1" cellpadding="6">
+        <tr>
+            <th></th><th>Product</th><th>Unit price</th><th>Quantity</th><th>Total</th><th></th>
+        </tr>
+        <tr th:each="line : ${cart.lines()}">
+            <td><img th:if="${!line.product().images.isEmpty()}"
+                     th:src="${line.product().images[0].imageUrl}" width="60" alt=""></td>
+            <td>
+                <a th:href="@{/products/{id}(id=${line.product().id})}"
+                   th:text="${line.product().name}"></a>
+                <div th:if="${line.problem() != null}" th:text="${line.problem()}"
+                     style="color:red"></div>
+            </td>
+            <td th:text="${line.unitPrice()} + ' €'"></td>
+            <td>
+                <form th:action="@{/cart/items/{id}/update(id=${line.itemId()})}" method="post"
+                      style="display:inline">
+                    <input type="number" name="quantity" th:value="${line.quantity()}" min="0" style="width:60px">
+                    <button type="submit">Update</button>
+                </form>
+            </td>
+            <td th:text="${line.lineTotal()} + ' €'"></td>
+            <td>
+                <form th:action="@{/cart/items/{id}/remove(id=${line.itemId()})}" method="post"
+                      style="display:inline">
+                    <button type="submit">Remove</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+    <p><b>Subtotal: <span th:text="${cart.subtotal()} + ' €'"></span></b></p>
+    <p><small>Promo codes and shipping are applied at checkout. Setting a quantity of 0 removes the item.</small></p>
+
+    <p th:if="${!cart.checkoutAllowed()}" style="color:red">
+        Fix the problems above before you can check out.</p>
+    <p><i>The checkout button comes with the next step.</i></p>
+</div>
+
+<p><a th:href="@{/products}">&larr; Continue shopping</a></p>
+</body>
+</html>

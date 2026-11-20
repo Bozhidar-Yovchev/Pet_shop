@@ -6,6 +6,8 @@
 </head>
 <body>
 <div th:replace="~{fragments/nav :: nav}"></div>
+<p th:if="${message}" th:text="${message}" style="color:green"></p>
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
 
 <p><a th:href="@{/products}">&larr; Back to products</a></p>
 
@@ -41,6 +43,16 @@
     <span th:if="${product.inventory.quantity gt 5}">In stock</span>
 </p>
 
-<p><i>The "Add to cart" button comes with the cart step.</i></p>
+<div th:if="${product.active and product.inventory.quantity gt 0}">
+    <form th:if="${session.customerId != null}" th:action="@{/cart/add}" method="post">
+        <input type="hidden" name="productId" th:value="${product.id}">
+        <input type="number" name="quantity" value="1" min="1"
+               th:max="${product.inventory.quantity}" style="width:60px">
+        <button type="submit">Add to cart</button>
+    </form>
+    <p th:if="${session.customerId == null}">
+        <a th:href="@{/login}">Log in</a> to add this product to your cart.</p>
+</div>
+<p th:if="${product.inventory.quantity == 0}"><button disabled>Out of stock</button></p>
 </body>
 </html>
